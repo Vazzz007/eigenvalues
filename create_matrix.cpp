@@ -95,14 +95,17 @@ void PrintVector(int n, double* x, int max_out)
 	printf("\n");
 }
 
-int InputMatrix(int n, double *A, FILE *fin){
-    int i;
-    int j;
+int InputMatrix(int n, double *A, double *values_right, FILE *fin){
     
-    for (i = 0; i < n; ++i)
-        for (j = 0; j < n; ++j)
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < n; ++j)
             if (fscanf(fin, "%lf", &A[i * n + j]) != 1)
                 return -1;
+            
+    for (int i = 0; i < n; ++i){
+        if (fscanf(fin, "%lf", &values_right[i]) != 1)
+            return -1;
+    }
     
     return 0;
 }

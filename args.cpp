@@ -17,7 +17,7 @@ int get_args(int *matrixSize, char **inFileName, int *verbose, char **formula, i
     globalArgs.inFileName = NULL;
     globalArgs.verbose = 0;
     globalArgs.formula = NULL;
-    globalArgs.max_out = 5;
+    globalArgs.max_out = 6;
     opterr = 0;
     
     while( (opt = getopt( argc, argv, optString )) != -1 ) {

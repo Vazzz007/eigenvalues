@@ -16,7 +16,7 @@
 int create_matrix(double *A, int n, char *formula);
 void PrintMatrix(int n, double *matr, int max_out);
 void PrintVector(int n, double* x, int max_out);
-int InputMatrix(int n, double *A, FILE *fin);
+int InputMatrix(int n, double *A, double *values_right, FILE *fin);
 double SolutionError(int n, double* a, double* x);
 
 #endif /* __CREATE_MATRIX_H_INCLUDED__ */

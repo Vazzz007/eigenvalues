@@ -53,6 +53,9 @@ int main(int argc, char **argv){
     double *x2 = NULL;
     double *A = NULL;
     double *values = NULL;
+    double *values_right = NULL;
+    double sum_v = 0;
+    double sum_v_r = 0;
     FILE *fin;
     double eps = 1e-10;
     int iter;
@@ -70,6 +73,7 @@ int main(int argc, char **argv){
 	x1 = (double*)malloc(n * sizeof(double));
         x2 = (double*)malloc(n * sizeof(double));
         values = (double*)malloc(n * sizeof(double));
+        values_right = (double*)malloc(n * sizeof(double));
 	
         if ((A && x1 && x2 && values) != 1) {
             printf ("Error: Not enough memory for matrice A!\n");
@@ -81,6 +85,8 @@ int main(int argc, char **argv){
 	      free(x2);
             if (values == NULL)
 	      free(values);
+            if (values_right == NULL)
+	      free(values_right);
             return -1;
         }
         
@@ -90,6 +96,7 @@ int main(int argc, char **argv){
 	    free(x1);
             free(x2);
             free(values);
+            free(values_right);
 	    return -1;
 	}
     } else {
@@ -116,6 +123,7 @@ int main(int argc, char **argv){
 	x1 = (double*)malloc(n * sizeof(double));
         x2 = (double*)malloc(n * sizeof(double));
         values = (double*)malloc(n * sizeof(double));
+        values_right = (double*)malloc(n * sizeof(double));
 	
         if ((A && x1 && x2 && values) != 1) {
             printf ("Error: Not enough memory for matrice A!\n");
@@ -127,16 +135,19 @@ int main(int argc, char **argv){
 	      free(x2);
             if (values == NULL)
 	      free(values);
+            if (values_right == NULL)
+	      free(values_right);
             return -1;
         }
         
-        if (InputMatrix(n, A, fin) != 0){
+        if (InputMatrix(n, A, values_right, fin) != 0){
 	    printf("Error: Can't read matrix from file!\n");
 	    fclose(fin);
 	    free(A);
 	    free(x1);
             free(x2);
             free(values);
+            free(values_right);
 	    return -1;
 	}
     }
@@ -175,8 +186,17 @@ int main(int argc, char **argv){
         inv2 += values[i] * values[i];
     }
     
+    for (int i = 0; i < n; ++i){
+        sum_v += values[i];
+        sum_v_r += values_right[i];
+    }
+    
     printf("\nValues:\n");
     PrintVector(n, values, max_out);
+    printf("\n");
+    
+    printf("\nRight values:\n");
+    PrintVector(n, values_right, max_out);
     printf("\n");
     
     printf("Finding time\t\t= %f sec.\n\n", 
@@ -185,6 +205,7 @@ int main(int argc, char **argv){
     
     printf("Sum(x_i) - Sum(a_i)\t\t= %g\n", inv1);
     printf("Sum(x_i ^ 2) - Sum(a_ij * a_ji)\t= %g\n", inv2);
+    printf("Sum(x_i) - Sum(values_right)\t= %g\n", fabs(sum_v - sum_v_r));
 
     
     
@@ -195,6 +216,7 @@ int main(int argc, char **argv){
     free(x1);
     free(x2);
     free(values);
+    free(values_right);
     
     return 0;
 }

@@ -166,7 +166,7 @@ static void CalcProduction(int n, double* a, int k, double* x1, double* x2)
 		}
 }
 
-void FindValues(int n, double* a, double* values, double eps, double* x1, double* x2, int* iterOut)
+void FindValues(int n, double* a, double* values, double eps, double* x1, double* x2, int* iterOut, int max_out, int v)
 {
 	int i;
 	int k;
@@ -177,8 +177,16 @@ void FindValues(int n, double* a, double* values, double eps, double* x1, double
 	iter = 0;
 
 	t = CalcNorm(n, a) * eps;
+    if (v == 1){
+        printf("\nNorm * eps = %10.3e , where eps = %10.3e\n", t, eps);
+    }
 
 	Ref(n, a);
+
+    if (v == 1){
+        printf("\nMatrix A after reflection:\n");
+        PrintMatrix(n, a, max_out);
+    }
 
 	for (k = n; k > 2; --k)
 		while (fabs(a[(k - 1) * n + k - 2]) > t)
@@ -186,11 +194,20 @@ void FindValues(int n, double* a, double* values, double eps, double* x1, double
 			s = GetShift(n, a, k);
 			MakeShift(n, a, k, s);
 
+
 			MakeDecomposition(n, a, k, x1, x2);
 			CalcProduction(n, a, k, x1, x2);
 
 			MakeShift(n, a, k, -s);
-
+            if (v == 1){
+                printf("\nIteration = %d\n", iter);
+                printf("\nMatrix Q:\n");
+                PrintMatrix(n, x1, max_out);
+                printf("\nMatrix R:\n");
+                PrintMatrix(n, x2, max_out);
+                printf("\nMatrix A=QR:\n");
+                PrintMatrix(n, a, max_out);
+            }
 			++iter;
 		}
 

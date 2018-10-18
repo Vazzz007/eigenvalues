@@ -173,7 +173,7 @@ int main(int argc, char **argv){
         exit( EXIT_FAILURE );
     }
     
-    FindValues(n, A, values, eps, x1, x2, &iter);
+    FindValues(n, A, values, eps, x1, x2, &iter, max_out, verbose);
     
     if( clock_gettime( CLOCK_MONOTONIC, &time_end) == -1 ) {
         perror( "clock gettime" );
@@ -188,16 +188,19 @@ int main(int argc, char **argv){
     
     for (int i = 0; i < n; ++i){
         sum_v += values[i];
-        sum_v_r += values_right[i];
+        if (inFileName != NULL)
+            sum_v_r += values_right[i];
     }
     
     printf("\nValues:\n");
     PrintVector(n, values, max_out);
     printf("\n");
     
-    printf("\nRight values:\n");
-    PrintVector(n, values_right, max_out);
-    printf("\n");
+    if (inFileName != NULL){
+        printf("\nRight values:\n");
+        PrintVector(n, values_right, max_out);
+        printf("\n");
+    }
     
     printf("Finding time\t\t= %f sec.\n\n", 
            (double)time_end.tv_sec + (double)time_end.tv_nsec/(double)1000000000);
@@ -205,7 +208,8 @@ int main(int argc, char **argv){
     
     printf("Sum(x_i) - Sum(a_i)\t\t= %g\n", inv1);
     printf("Sum(x_i ^ 2) - Sum(a_ij * a_ji)\t= %g\n", inv2);
-    printf("Sum(x_i) - Sum(values_right)\t= %g\n", fabs(sum_v - sum_v_r));
+    if (inFileName != NULL)
+        printf("Sum(x_i) - Sum(values_from_paper)\t= %g\n", fabs(sum_v - sum_v_r));
 
     
     

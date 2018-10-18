@@ -11,6 +11,17 @@ static double sym_f(int i, int j){
     return (double)fabs(i - j);
 }
 
+static double semi_id(int i, int j, int n){
+    if ((i != n-1) && (j != n-1)){
+        if (i == j)
+            return (double)1;
+        return (double)0;
+    }
+    if (i == n-1)
+        return (double)(j+1);
+    return (double)(i+1);
+}
+
 static double symnul_f(int i, int j){
     return (double)fabs(i - j) + 1.0;
 }
@@ -57,6 +68,10 @@ int create_matrix(double *A, int n, char *formula){
         for (i = 0; i < n; ++i)
             for (j = 0; j < n; ++j)
                 A[i * n + j] = uniform(i, j, n);
+    } else if (strcmp(formula, "10") == 0){
+        for (i = 0; i < n; ++i)
+            for (j = 0; j < n; ++j)
+                A[i * n + j] = semi_id(i, j, n);
     } else {
         printf ("Error: Invalid formula!\n");
         help();

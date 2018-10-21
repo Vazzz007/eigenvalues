@@ -41,7 +41,7 @@ static void Ref(int n, double* a)
 
 		tmp2 = sqrt(a[(i + 1) * n + i] * a[(i + 1) * n + i] + tmp1);
 
-		if (tmp2 < 1e-100)
+		if (tmp2 < 1e-100) // If all elements except diagonal are zero, go to next iter
 		{
 			a[(i + 1) * n + i] = 0.0;
 			a[(i + 2) * n + i] = 0.0;
@@ -49,19 +49,23 @@ static void Ref(int n, double* a)
 			continue;
 		}
 
-		if (tmp1 < 1e-100)
+		if (tmp1 < 1e-100) // If all elements except diagonal and neighboor are zero, go to next iter
 		{
 			a[(i + 2) * n + i] = 0.0;
 
 			continue;
 		}
-
+        
+        // Evaluating vector x from lemma and reflection matrix
+        
 		a[(i + 1) * n + i] -= tmp2;
 
 		tmp1 = 1.0 / sqrt(a[(i + 1) * n + i] * a[(i + 1) * n + i] + tmp1);
 		for (j = i + 1; j < n; ++j)
 			a[j * n + i] *= tmp1;
-
+        
+        // Evaluating unitar matrix A(i) = UA(i-1)U*
+        
 		for (j = i + 1; j < n; ++j)
 		{
 			tmp1 = 0.0;
@@ -112,6 +116,8 @@ static void MakeDecomposition(int n, double* a, int k, double* x1, double* x2)
 
 	for (i = 0; i < k - 1; ++i)
 	{
+        // Creating Q and R
+        
 		tmp1 = a[(i + 1) * n + i] * a[(i + 1) * n + i];
 
 		if (tmp1 < 1e-100)
@@ -152,6 +158,8 @@ static void CalcProduction(int n, double* a, int k, double* x1, double* x2)
 	int i;
 	int j;
 	double tmp;
+    
+    // Multiply only three-diagonal elements using no aditional matrix
 
 	for (i = 0; i < k - 1; ++i)
 		for (j = 0; j < i + 2; ++j)

@@ -1,10 +1,10 @@
-# eigenvalues_QR_reflection
+# eigenvalues_QR_reflection(only for symmetric matrix!)
 The QR reflection method for finding the eigenvalues using an QR decomposition.
 
 Use "make" to compile.
 
 Program supports the following command-line arguments:
-  * -i input_file_name.txt - name of the input file
+  * -i input_file_name.txt - name of the input file with symmetric matrix
   * -n number - number of elements (default = 10)
   * -v - option for debugging
   * -f formula - define formula (choose from { 10 } // from the paper)

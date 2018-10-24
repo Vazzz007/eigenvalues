@@ -116,11 +116,11 @@ static void MakeDecomposition(int n, double* a, int k, double* x1, double* x2)
 
 	for (i = 0; i < k - 1; ++i)
 	{
-        // Creating Q and R
+        // Creating Q, while R is up-right triangle of A
         
 		tmp1 = a[(i + 1) * n + i] * a[(i + 1) * n + i];
 
-		if (tmp1 < 1e-100)
+        if (tmp1 < 1e-100) // Only diagonal part of matrix
 		{
 			tmp2 = fabs(a[i * n + i]);
 			x1[i] = (a[i * n + i] > 0.0 ? 1.0 : -1.0);
@@ -128,7 +128,7 @@ static void MakeDecomposition(int n, double* a, int k, double* x1, double* x2)
 		}
 		else
 		{
-			tmp2 = sqrt(a[i * n + i] * a[i * n + i] + tmp1);
+            tmp2 = sqrt(a[i * n + i] * a[i * n + i] + tmp1); // Norm
 
 			a[i * n + i] -= tmp2;
 
@@ -137,6 +137,7 @@ static void MakeDecomposition(int n, double* a, int k, double* x1, double* x2)
 			x2[i] = a[(i + 1) * n + i] / tmp1;
 		}
 
+        // Reflection (note, that a[(i + 1) * n + i] add up to zero)
 		for (j = i + 1; j < k; ++j)
 		{
 			tmp1 = x1[i] * a[i * n + j];
@@ -159,7 +160,7 @@ static void CalcProduction(int n, double* a, int k, double* x1, double* x2)
 	int j;
 	double tmp;
     
-    // Multiply only three-diagonal elements using no aditional matrix
+    // Find R, and apply to A
 
 	for (i = 0; i < k - 1; ++i)
 		for (j = 0; j < i + 2; ++j)
@@ -209,11 +210,11 @@ void FindValues(int n, double* a, double* values, double eps, double* x1, double
 			MakeShift(n, a, k, -s);
             if (v == 1){
                 printf("\nIteration = %d\n", iter);
-                printf("\nMatrix Q:\n");
+                printf("\nMatrix x1:\n");
                 PrintMatrix(n, x1, max_out);
-                printf("\nMatrix R:\n");
+                printf("\nMatrix x2:\n");
                 PrintMatrix(n, x2, max_out);
-                printf("\nMatrix A=QR:\n");
+                printf("\nMatrix R (=A(i)):\n");
                 PrintMatrix(n, a, max_out);
             }
 			++iter;

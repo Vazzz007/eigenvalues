@@ -116,7 +116,7 @@ static void MakeDecomposition(int n, double* a, int k, double* x1, double* x2)
 
 	for (i = 0; i < k - 1; ++i)
 	{
-        // Creating Q, while R is up-right triangle of A
+        // Creating reflection vectors
         
 		tmp1 = a[(i + 1) * n + i] * a[(i + 1) * n + i];
 
